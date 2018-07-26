@@ -1,0 +1,72 @@
+Name:           dev-nbi-85cf84f4b9-zwbx4
+Namespace:      onap
+Node:           node5/10.0.0.6
+Start Time:     Thu, 26 Jul 2018 14:42:50 +0800
+Labels:         app=nbi
+                name=dev-nbi
+                pod-template-hash=4179409065
+                release=dev
+Annotations:    cni.projectcalico.org/podIP=10.42.1.14/32
+                field.cattle.io/publicEndpoints=[{"addresses":["10.0.0.4"],"port":30274,"protocol":"TCP","serviceName":"onap:nbi","allNodes":true}]
+Status:         Running
+IP:             10.42.1.14
+Controlled By:  ReplicaSet/dev-nbi-85cf84f4b9
+Containers:
+  nbi:
+    Container ID:   docker://f588221bc7c33453f9a550165cbc7e14578ddaf0fcf147564f7c8d36cc221714
+    Image:          nexus3.onap.org:10001/onap/externalapi/nbi:2.0.0
+    Image ID:       docker-pullable://nexus3.onap.org:10001/onap/externalapi/nbi@sha256:01b6bd1d24e12ff2c7ead39ec6e87a23caf301e9d1cf8de0be0eba5cfcd4d324
+    Port:           8080/TCP
+    State:          Waiting
+      Reason:       CrashLoopBackOff
+    Last State:     Terminated
+      Reason:       Error
+      Exit Code:    1
+      Started:      Thu, 26 Jul 2018 18:03:41 +0800
+      Finished:     Thu, 26 Jul 2018 18:03:47 +0800
+    Ready:          False
+    Restart Count:  38
+    Liveness:       tcp-socket :8080 delay=10s timeout=1s period=10s #success=1 #failure=3
+    Readiness:      tcp-socket :8080 delay=10s timeout=1s period=10s #success=1 #failure=3
+    Environment:
+      SPRING_DATASOURCE_URL:         jdbc:mariadb://nbi-mariadbhost.onap:3306/nbi
+      SPRING_DATASOURCE_USERNAME:    rene
+      SPRING_DATASOURCE_PASSWORD:    <set to the key 'db-user-password' in secret 'dev-nbi-secret'>  Optional: false
+      SPRING_DATA_MONGODB_HOST:      nbi-mongohost.onap
+      SPRING_DATA_MONGODB_PORT:      27017
+      SPRING_DATA_MONGODB_DATABASE:  ServiceOrderDB
+      ONAP_LCPCLOUDREGIONID:         Yolo
+      ONAP_TENANTID:                 1234
+      ONAP_CLOUDOWNER:               CloudOwner
+      NBI_URL:                       http://nbi.onap:8080/nbi/api/v1
+      SDC_HOST:                      http://sdc-be.onap:8080
+      SDC_HEADER_ECOMPINSTANCEID:    OOM
+      SDC_HEADER_AUTHORIZATION:      Basic YWFpOktwOGJKNFNYc3pNMFdYbGhhazNlSGxjc2UyZ0F3ODR2YW9HR21KdlV5MlU=
+      AAI_HOST:                      https://aai.onap:8443
+      AAI_HEADER_AUTHORIZATION:      Basic QUFJOkFBSQ==
+      SO_HOST:                       http://so.onap:8080
+      LOGGING_LEVEL_ORG_ONAP_NBI:    INFO
+    Mounts:
+      /etc/localtime from localtime (ro)
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-8rs9k (ro)
+Conditions:
+  Type           Status
+  Initialized    True 
+  Ready          False 
+  PodScheduled   True 
+Volumes:
+  localtime:
+    Type:  HostPath (bare host directory volume)
+    Path:  /etc/localtime
+  default-token-8rs9k:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  default-token-8rs9k
+    Optional:    false
+QoS Class:       BestEffort
+Node-Selectors:  <none>
+Tolerations:     node.kubernetes.io/not-ready:NoExecute for 300s
+                 node.kubernetes.io/unreachable:NoExecute for 300s
+Events:
+  Type     Reason   Age                From            Message
+  ----     ------   ----               ----            -------
+  Warning  BackOff  4m (x579 over 2h)  kubelet, node5  Back-off restarting failed container

@@ -1,0 +1,55 @@
+Name:           dev-uui-server-7986fcc6f8-6smpr
+Namespace:      onap
+Node:           node3/10.0.0.8
+Start Time:     Thu, 26 Jul 2018 14:47:37 +0800
+Labels:         app=uui-server
+                pod-template-hash=3542977294
+                release=dev
+Annotations:    cni.projectcalico.org/podIP=10.42.2.30/32
+                field.cattle.io/publicEndpoints=[{"addresses":["10.0.0.4"],"port":30399,"protocol":"TCP","serviceName":"onap:uui-server","allNodes":true}]
+Status:         Running
+IP:             10.42.2.30
+Controlled By:  ReplicaSet/dev-uui-server-7986fcc6f8
+Containers:
+  uui-server:
+    Container ID:   docker://0348a5c6b03b6d17f457b8b66a4fde2999726cd991852b05253e154b3930851b
+    Image:          nexus3.onap.org:10001/onap/usecase-ui/usecase-ui-server:1.1.1
+    Image ID:       docker-pullable://nexus3.onap.org:10001/onap/usecase-ui/usecase-ui-server@sha256:3120aa7034b3eb83775c41b0ed79b584e0aa09a8a59a9c9c286ad61def83c684
+    Port:           8082/TCP
+    State:          Running
+      Started:      Thu, 26 Jul 2018 18:08:14 +0800
+    Last State:     Terminated
+      Reason:       Error
+      Exit Code:    137
+      Started:      Thu, 26 Jul 2018 18:02:03 +0800
+      Finished:     Thu, 26 Jul 2018 18:02:55 +0800
+    Ready:          False
+    Restart Count:  31
+    Liveness:       tcp-socket :8082 delay=10s timeout=1s period=10s #success=1 #failure=3
+    Readiness:      tcp-socket :8082 delay=10s timeout=1s period=10s #success=1 #failure=3
+    Environment:
+      MSB_ADDR:  msb-iag.onap:80
+      MR_ADDR:   message-router.onap:3904
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-8rs9k (ro)
+Conditions:
+  Type           Status
+  Initialized    True 
+  Ready          False 
+  PodScheduled   True 
+Volumes:
+  default-token-8rs9k:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  default-token-8rs9k
+    Optional:    false
+QoS Class:       BestEffort
+Node-Selectors:  <none>
+Tolerations:     node.kubernetes.io/not-ready:NoExecute for 300s
+                 node.kubernetes.io/unreachable:NoExecute for 300s
+Events:
+  Type     Reason     Age                 From            Message
+  ----     ------     ----                ----            -------
+  Warning  Unhealthy  50m (x37 over 2h)   kubelet, node3  Liveness probe failed: dial tcp 10.42.2.30:8082: getsockopt: connection refused
+  Warning  Unhealthy  20m (x102 over 2h)  kubelet, node3  Readiness probe failed: dial tcp 10.42.2.30:8082: getsockopt: connection refused
+  Warning  BackOff    5m (x287 over 1h)   kubelet, node3  Back-off restarting failed container
+  Normal   Created    24s (x32 over 2h)   kubelet, node3  Created container

@@ -1,0 +1,112 @@
+Name:           dev-aaf-service-59dd9778f5-dwxcs
+Namespace:      onap
+Node:           node1/10.0.0.4
+Start Time:     Thu, 26 Jul 2018 14:40:35 +0800
+Labels:         app=aaf-service
+                pod-template-hash=1588533491
+                release=dev
+Annotations:    cni.projectcalico.org/podIP=10.42.0.9/32
+                field.cattle.io/publicEndpoints=[{"addresses":["10.0.0.4"],"port":30247,"protocol":"TCP","serviceName":"onap:aaf-service","allNodes":true}]
+Status:         Running
+IP:             10.42.0.9
+Controlled By:  ReplicaSet/dev-aaf-service-59dd9778f5
+Init Containers:
+  aaf-service-job-complete:
+    Container ID:  docker://ea0c29604191a60da01aca3605e8b4591d9c0355ace09951bdc4d0cba829f778
+    Image:         oomk8s/readiness-check:2.0.0
+    Image ID:      docker-pullable://oomk8s/readiness-check@sha256:7daa08b81954360a1111d03364febcb3dcfeb723bcc12ce3eb3ed3e53f2323ed
+    Port:          <none>
+    Command:
+      /root/job_complete.py
+    Args:
+      -j
+      dev-aaf-create-config
+    State:          Terminated
+      Reason:       Completed
+      Exit Code:    0
+      Started:      Thu, 26 Jul 2018 15:37:39 +0800
+      Finished:     Thu, 26 Jul 2018 15:37:46 +0800
+    Ready:          True
+    Restart Count:  2
+    Environment:
+      NAMESPACE:  onap (v1:metadata.namespace)
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-8rs9k (ro)
+  aaf-service-readiness:
+    Container ID:  docker://2fa3a66c78a6840c3c3ea8940d550015c9a72bd776958b6920f3c88905bacc3f
+    Image:         oomk8s/readiness-check:2.0.0
+    Image ID:      docker-pullable://oomk8s/readiness-check@sha256:7daa08b81954360a1111d03364febcb3dcfeb723bcc12ce3eb3ed3e53f2323ed
+    Port:          <none>
+    Command:
+      /root/ready.py
+    Args:
+      --container-name
+      aaf-cs
+      --container-name
+      aaf-locate
+    State:          Terminated
+      Reason:       Completed
+      Exit Code:    0
+      Started:      Thu, 26 Jul 2018 15:37:59 +0800
+      Finished:     Thu, 26 Jul 2018 16:27:46 +0800
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      NAMESPACE:  onap (v1:metadata.namespace)
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-8rs9k (ro)
+Containers:
+  aaf-service:
+    Container ID:  docker://5d444c144ea2ab5564e20f28e26bb112afeb25a606ca97245a3cabf2de063e4f
+    Image:         nexus3.onap.org:10001/onap/aaf/aaf_service:2.1.1
+    Image ID:      docker-pullable://nexus3.onap.org:10001/onap/aaf/aaf_service@sha256:7ee4ece1e4083edb1d6a0dd02c61f09bb789f2d0f924f7722df87a4e27d5249f
+    Port:          <none>
+    Command:
+      /bin/bash
+      -c
+       ln -s /opt/app/osaaf/data /data;/opt/app/aaf/service/bin/service 
+    State:          Waiting
+      Reason:       CrashLoopBackOff
+    Last State:     Terminated
+      Reason:       Error
+      Exit Code:    137
+      Started:      Thu, 26 Jul 2018 18:02:20 +0800
+      Finished:     Thu, 26 Jul 2018 18:03:12 +0800
+    Ready:          False
+    Restart Count:  29
+    Liveness:       tcp-socket :8100 delay=10s timeout=1s period=10s #success=1 #failure=3
+    Readiness:      tcp-socket :8100 delay=10s timeout=1s period=10s #success=1 #failure=3
+    Environment:
+      CASSANDRA_CLUSTER:  cassandra_container
+    Mounts:
+      /etc/localtime from localtime (ro)
+      /opt/app/osaaf from aaf-persistent-vol (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-8rs9k (ro)
+Conditions:
+  Type           Status
+  Initialized    True 
+  Ready          False 
+  PodScheduled   True 
+Volumes:
+  localtime:
+    Type:  HostPath (bare host directory volume)
+    Path:  /etc/localtime
+  aaf-persistent-vol:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  dev-aaf-pvc
+    ReadOnly:   false
+  default-token-8rs9k:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  default-token-8rs9k
+    Optional:    false
+QoS Class:       BestEffort
+Node-Selectors:  <none>
+Tolerations:     node.kubernetes.io/not-ready:NoExecute for 300s
+                 node.kubernetes.io/unreachable:NoExecute for 300s
+Events:
+  Type     Reason     Age                 From            Message
+  ----     ------     ----                ----            -------
+  Normal   Pulling    56m (x15 over 1h)   kubelet, node1  pulling image "nexus3.onap.org:10001/onap/aaf/aaf_service:2.1.1"
+  Normal   Killing    26m (x23 over 1h)   kubelet, node1  Killing container with id docker://aaf-service:Container failed liveness probe.. Container will be killed and recreated.
+  Warning  Unhealthy  11m (x132 over 1h)  kubelet, node1  Readiness probe failed: dial tcp 10.42.0.9:8100: getsockopt: connection refused
+  Warning  BackOff    1m (x285 over 1h)   kubelet, node1  Back-off restarting failed container

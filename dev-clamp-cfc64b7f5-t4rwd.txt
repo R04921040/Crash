@@ -1,0 +1,117 @@
+Name:           dev-clamp-cfc64b7f5-t4rwd
+Namespace:      onap
+Node:           node5/10.0.0.6
+Start Time:     Thu, 26 Jul 2018 14:41:51 +0800
+Labels:         app=clamp
+                pod-template-hash=797206391
+                release=dev
+Annotations:    cni.projectcalico.org/podIP=10.42.1.10/32
+                field.cattle.io/publicEndpoints=[{"addresses":["10.0.0.4"],"port":30295,"protocol":"TCP","serviceName":"onap:clamp","allNodes":true}]
+Status:         Running
+IP:             10.42.1.10
+Controlled By:  ReplicaSet/dev-clamp-cfc64b7f5
+Init Containers:
+  clamp-readiness:
+    Container ID:  docker://e9c713004f0f7e6818d7c66300381814c92c2de849923509ac62f91be5d2490a
+    Image:         oomk8s/readiness-check:2.0.0
+    Image ID:      docker-pullable://oomk8s/readiness-check@sha256:7daa08b81954360a1111d03364febcb3dcfeb723bcc12ce3eb3ed3e53f2323ed
+    Port:          <none>
+    Command:
+      /root/ready.py
+    Args:
+      --container-name
+      clampdb
+    State:          Terminated
+      Reason:       Completed
+      Exit Code:    0
+      Started:      Thu, 26 Jul 2018 15:32:27 +0800
+      Finished:     Thu, 26 Jul 2018 15:33:20 +0800
+    Ready:          True
+    Restart Count:  3
+    Environment:
+      NAMESPACE:  onap (v1:metadata.namespace)
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-8rs9k (ro)
+Containers:
+  clamp-filebeat-onap:
+    Container ID:   docker://12fa9ecebcc6145202325f3544bcc224b2a40c8d89196e15c78b39e82dad7503
+    Image:          docker.elastic.co/beats/filebeat:5.5.0
+    Image ID:       docker-pullable://docker.elastic.co/beats/filebeat@sha256:fe7602b641ed8ee288f067f7b31ebde14644c4722d9f7960f176d621097a5942
+    Port:           <none>
+    State:          Running
+      Started:      Thu, 26 Jul 2018 15:33:34 +0800
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /usr/share/filebeat/datag from dev-clamp-data-filebeat (rw)
+      /usr/share/filebeat/filebeat.yml from dev-clamp-filebeat-conf (rw)
+      /var/log/onap from dev-clamp-logs (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-8rs9k (ro)
+  clamp:
+    Container ID:  docker://51a1020843c2846fea43319c4f9c3d7ac4202f57306cef2e63e823fcd5cfe831
+    Image:         nexus3.onap.org:10001/onap/clamp:2.0.2
+    Image ID:      docker-pullable://nexus3.onap.org:10001/onap/clamp@sha256:5ca257be89ac9d9604f918f66454e25d4bc3dad7cabfd8d67facbf293a274369
+    Port:          8080/TCP
+    Args:
+      -Dcom.att.eelf.logging.file=file:/opt/clamp/logback.xml
+      
+    State:          Waiting
+      Reason:       CrashLoopBackOff
+    Last State:     Terminated
+      Reason:       Error
+      Exit Code:    137
+      Started:      Thu, 26 Jul 2018 18:01:45 +0800
+      Finished:     Thu, 26 Jul 2018 18:03:06 +0800
+    Ready:          False
+    Restart Count:  39
+    Limits:
+      cpu:     1
+      memory:  1288490188800m
+    Requests:
+      cpu:      10m
+      memory:   800Mi
+    Liveness:   tcp-socket :8080 delay=30s timeout=1s period=10s #success=1 #failure=3
+    Readiness:  tcp-socket :8080 delay=10s timeout=1s period=10s #success=1 #failure=3
+    Environment:
+      SPRING_APPLICATION_JSON:  <set to the key 'spring_application_json' of config map 'dev-clamp'>  Optional: false
+    Mounts:
+      /opt/clamp/logback.xml from dev-clamp-config (rw)
+      /opt/clamp/sdc-controllers-config.json from dev-clamp-config (rw)
+      /var/log/onap from dev-clamp-logs (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-8rs9k (ro)
+Conditions:
+  Type           Status
+  Initialized    True 
+  Ready          False 
+  PodScheduled   True 
+Volumes:
+  dev-clamp-config:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      dev-clamp
+    Optional:  false
+  dev-clamp-filebeat-conf:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      dev-clamp-filebeat-configmap
+    Optional:  false
+  dev-clamp-data-filebeat:
+    Type:    EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:  
+  dev-clamp-logs:
+    Type:    EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:  
+  default-token-8rs9k:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  default-token-8rs9k
+    Optional:    false
+QoS Class:       Burstable
+Node-Selectors:  <none>
+Tolerations:     node.kubernetes.io/not-ready:NoExecute for 300s
+                 node.kubernetes.io/unreachable:NoExecute for 300s
+Events:
+  Type     Reason     Age                 From            Message
+  ----     ------     ----                ----            -------
+  Normal   Pulled     54m (x28 over 2h)   kubelet, node5  Successfully pulled image "nexus3.onap.org:10001/onap/clamp:2.0.2"
+  Normal   Pulling    39m (x31 over 2h)   kubelet, node5  pulling image "nexus3.onap.org:10001/onap/clamp:2.0.2"
+  Warning  Unhealthy  14m (x213 over 2h)  kubelet, node5  Readiness probe failed: dial tcp 10.42.1.10:8080: getsockopt: connection refused
+  Warning  BackOff    4m (x316 over 2h)   kubelet, node5  Back-off restarting failed container
